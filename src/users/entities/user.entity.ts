@@ -16,4 +16,7 @@ export class User {
 
     @Column({name: 'password', type: 'text'})
     password: string;
+
+    @Column({name: 'refresh_token', nullable: true})
+    refreshToken: string
 }

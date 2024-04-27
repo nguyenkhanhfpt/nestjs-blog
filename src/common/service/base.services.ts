@@ -23,8 +23,11 @@ export abstract class BaseService {
     return await this.getRepository().save(data);
   }
 
-  update(id: number, updateUserDto) {
-    return `This action updates a #${id} user`;
+  async update(id: number, data) {
+    return await this.getRepository().save({
+      id,
+      ...data
+    });
   }
 
   remove(id: number) {
