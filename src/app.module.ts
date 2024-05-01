@@ -7,6 +7,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import { APP_GUARD } from '@nestjs/core';
 import { AccessTokenGuard } from './common/guard/access_token.guard';
+import { BlogsModule } from './blogs/blogs.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { AccessTokenGuard } from './common/guard/access_token.guard';
     }),
     UsersModule,
     AuthModule,
+    BlogsModule,
   ],
   controllers: [AppController],
   providers: [

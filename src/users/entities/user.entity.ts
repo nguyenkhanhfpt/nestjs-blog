@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Blog } from "src/blogs/entities/blog.entity";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity({name: 'users'})
 export class User {
@@ -18,5 +19,8 @@ export class User {
     password: string;
 
     @Column({name: 'refresh_token', nullable: true})
-    refreshToken: string
+    refreshToken: string;
+
+    @OneToMany(() => Blog, (blog) => blog.user)
+    blogs: Blog[]
 }
