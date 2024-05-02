@@ -9,7 +9,7 @@ import { DataSource } from 'typeorm';
 import { Blog } from '../entities/blog.entity';
 
 @Injectable()
-export class UpdateGuard implements CanActivate {
+export class BlogGuard implements CanActivate {
   constructor(@Inject(DataSource) private readonly dataSource: DataSource) {}
 
   async canActivate(context: ExecutionContext) {

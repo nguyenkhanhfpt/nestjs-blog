@@ -17,7 +17,7 @@ import { BlogsService } from './blogs.service';
 import { CreateBlogDto } from './dto/create-blog.dto';
 import { UpdateBlogDto } from './dto/update-blog.dto';
 import { UsersService } from 'src/users/users.service';
-import { UpdateGuard } from './guard/update.guard';
+import { BlogGuard } from './guard/blog.guard';
 
 @Controller('blogs')
 export class BlogsController {
@@ -51,13 +51,14 @@ export class BlogsController {
   }
 
   @Patch(':id')
-  @UseGuards(UpdateGuard)
+  @UseGuards(BlogGuard)
   @UsePipes(new ValidationPipe({transform: true}))
   update(@Param('id') id: number, @Body() updateBlogDto: UpdateBlogDto) {
     return this.blogsService.updateBlog(id, updateBlogDto);
   }
 
   @Delete(':id')
+  @UseGuards(BlogGuard)
   remove(@Param('id') id: number) {
     return this.blogsService.remove(id);
   }
