@@ -4,9 +4,10 @@ import { BlogsController } from './blogs.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Blog } from './entities/blog.entity';
 import { UsersModule } from 'src/users/users.module';
+import { CacheModule } from 'src/common/module/cache.module';
 
 @Module({
-  imports: [UsersModule, TypeOrmModule.forFeature([Blog])],
+  imports: [UsersModule, CacheModule, TypeOrmModule.forFeature([Blog])],
   controllers: [BlogsController],
   providers: [BlogsService],
 })

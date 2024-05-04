@@ -18,12 +18,16 @@ import { CreateBlogDto } from './dto/create-blog.dto';
 import { UpdateBlogDto } from './dto/update-blog.dto';
 import { UsersService } from 'src/users/users.service';
 import { BlogGuard } from './guard/blog.guard';
+import { CacheService } from 'src/common/service/cache.services';
 
 @Controller('blogs')
 export class BlogsController {
+  private BLOG_REDIS = 'blog-redis';
+
   constructor(
     private readonly blogsService: BlogsService,
-    private readonly usersService: UsersService
+    private readonly usersService: UsersService,
+    private readonly cacheService: CacheService,
   ) {}
 
   @Post()
@@ -37,8 +41,16 @@ export class BlogsController {
   }
 
   @Get()
-  findAll() {
-    return this.blogsService.findAll();
+  async findAll() {
+    let blogs = await this.cacheService.getCache(this.BLOG_REDIS);
+
+    if (blogs == undefined) {
+      blogs = await this.blogsService.findAll();
+
+      await this.cacheService.setCache(this.BLOG_REDIS, blogs)
+    }
+
+    return blogs;
   }
 
   @Get(':id')
@@ -52,7 +64,7 @@ export class BlogsController {
 
   @Patch(':id')
   @UseGuards(BlogGuard)
-  @UsePipes(new ValidationPipe({transform: true}))
+  @UsePipes(new ValidationPipe({ transform: true }))
   update(@Param('id') id: number, @Body() updateBlogDto: UpdateBlogDto) {
     return this.blogsService.updateBlog(id, updateBlogDto);
   }
