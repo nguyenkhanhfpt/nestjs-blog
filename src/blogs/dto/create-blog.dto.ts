@@ -1,4 +1,5 @@
-import { IsNotEmpty } from "class-validator";
+import { IsEmpty, IsEnum, IsNotEmpty } from "class-validator";
+import { BlogStatus } from "../entities/blog.entity";
 
 export class CreateBlogDto {
     @IsNotEmpty()
@@ -6,4 +7,7 @@ export class CreateBlogDto {
 
     @IsNotEmpty()
     content: string;
+
+    @IsEnum(BlogStatus)
+    isPublic: number;
 }

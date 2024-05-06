@@ -1,6 +1,11 @@
 import { User } from "src/users/entities/user.entity";
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
+export enum BlogStatus {
+    PUBLIC = 1,
+    PRIVATE = 0,
+}
+
 @Entity({name: 'blogs'})
 export class Blog {
     @PrimaryGeneratedColumn()
@@ -14,6 +19,9 @@ export class Blog {
 
     @Column({name: 'content', type: 'text'})
     content: string;
+
+    @Column({name: 'is_public', type: 'enum', enum: BlogStatus, default: BlogStatus.PUBLIC})
+    isPublic: BlogStatus;
 
     @ManyToOne(() => User, (user) => user.blogs)
     user: User
