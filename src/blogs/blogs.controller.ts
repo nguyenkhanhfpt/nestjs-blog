@@ -19,6 +19,8 @@ import { UpdateBlogDto } from './dto/update-blog.dto';
 import { UsersService } from 'src/users/users.service';
 import { BlogGuard } from './guard/blog.guard';
 import { CacheService } from 'src/common/service/cache.services';
+import { BlogStatus } from './entities/blog.entity';
+import { AccessBlogGuard } from './guard/access-blog.guard';
 
 @Controller('blogs')
 export class BlogsController {
@@ -42,18 +44,24 @@ export class BlogsController {
 
   @Get()
   async findAll() {
+    let isPublic = BlogStatus.PUBLIC;
     let blogs = await this.cacheService.getCache(this.BLOG_REDIS);
 
     if (blogs == undefined) {
-      blogs = await this.blogsService.findAll();
+      blogs = await this.blogsService.findAll({
+        where: {
+          isPublic,
+        },
+      });
 
-      await this.cacheService.setCache(this.BLOG_REDIS, blogs)
+      await this.cacheService.setCache(this.BLOG_REDIS, blogs);
     }
 
     return blogs;
   }
 
   @Get(':id')
+  @UseGuards(AccessBlogGuard)
   async findOne(@Param('id') id: number) {
     let blog = await this.blogsService.findOne(id);
 
@@ -73,5 +81,10 @@ export class BlogsController {
   @UseGuards(BlogGuard)
   remove(@Param('id') id: number) {
     return this.blogsService.remove(id);
+  }
+
+  @Get('/user/:id')
+  async findAllByUser(@Param('id') id: number) {
+    return await this.blogsService.getBlogsByUser(id);
   }
 }
