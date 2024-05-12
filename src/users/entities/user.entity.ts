@@ -1,4 +1,5 @@
 import { Blog } from "src/blogs/entities/blog.entity";
+import { Category } from "src/categories/entities/category.entity";
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity({name: 'users'})
@@ -22,5 +23,8 @@ export class User {
     refreshToken: string;
 
     @OneToMany(() => Blog, (blog) => blog.user)
-    blogs: Blog[]
+    blogs: Blog[];
+
+    @OneToMany(() => Category, (category) => category.creator)
+    categories: Category[];
 }
