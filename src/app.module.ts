@@ -10,6 +10,7 @@ import { AccessTokenGuard } from './common/guard/access_token.guard';
 import { BlogsModule } from './blogs/blogs.module';
 import { CacheModule } from '@nestjs/cache-manager';
 import { redisStore } from 'cache-manager-redis-yet';
+import { CategoriesModule } from './categories/categories.module';
 
 @Module({
   imports: [
@@ -40,6 +41,7 @@ import { redisStore } from 'cache-manager-redis-yet';
     UsersModule,
     AuthModule,
     BlogsModule,
+    CategoriesModule,
   ],
   controllers: [AppController],
   providers: [
