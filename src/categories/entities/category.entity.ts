@@ -10,5 +10,5 @@ export class Category {
     name: string;
 
     @ManyToOne(() => User, (user) => user.categories)
-    creator?: User;
+    Creator?: User;
 }
