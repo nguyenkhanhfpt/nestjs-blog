@@ -1,5 +1,7 @@
+import { BlogCategories } from "src/blog-categories/entities/blog-categories.entity";
+import { Category } from "src/categories/entities/category.entity";
 import { User } from "src/users/entities/user.entity";
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 export enum BlogStatus {
     PUBLIC = 1,
@@ -24,5 +26,8 @@ export class Blog {
     isPublic: BlogStatus;
 
     @ManyToOne(() => User, (user) => user.blogs)
-    user: User
+    user: User;
+
+    @OneToMany(() => BlogCategories, (blogCategory) => blogCategory.blog)
+    blogCategories: BlogCategories[];
 }

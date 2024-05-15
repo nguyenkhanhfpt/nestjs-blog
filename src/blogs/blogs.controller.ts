@@ -57,13 +57,23 @@ export class BlogsController {
       await this.cacheService.setCache(this.BLOG_REDIS, blogs);
     }
 
+    blogs = await this.blogsService.findAll({
+      where: {
+        isPublic,
+      },
+      relations: ['blogCategories.category']
+    });
+
     return blogs;
   }
 
   @Get(':id')
   @UseGuards(AccessBlogGuard)
   async findOne(@Param('id') id: number) {
-    let blog = await this.blogsService.findOne(id);
+    let blog = await this.blogsService.findOneBy({
+      where: {id},
+      relations: ['blogCategories.category']
+    });
 
     if (!blog) throw new NotFoundException();
 

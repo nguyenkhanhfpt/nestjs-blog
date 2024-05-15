@@ -11,6 +11,7 @@ import { BlogsModule } from './blogs/blogs.module';
 import { CacheModule } from '@nestjs/cache-manager';
 import { redisStore } from 'cache-manager-redis-yet';
 import { CategoriesModule } from './categories/categories.module';
+import { BlogCategoriesModule } from './blog-categories/blog-categories.module';
 
 @Module({
   imports: [
@@ -42,6 +43,7 @@ import { CategoriesModule } from './categories/categories.module';
     AuthModule,
     BlogsModule,
     CategoriesModule,
+    BlogCategoriesModule,
   ],
   controllers: [AppController],
   providers: [
