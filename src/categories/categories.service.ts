@@ -9,7 +9,8 @@ import { Repository } from 'typeorm';
 @Injectable()
 export class CategoriesService extends BaseService {
   constructor(
-    @InjectRepository(Category) private categoryRepository: Repository<Category>
+    @InjectRepository(Category)
+    private categoryRepository: Repository<Category>,
   ) {
     super();
     this.setRepository();
@@ -17,5 +18,16 @@ export class CategoriesService extends BaseService {
 
   setRepository() {
     this.repository = this.categoryRepository;
+  }
+
+  createOrGetCategoryByConditions(categoryList, user) {
+    return categoryList.map((item) => {
+      if (item.id) {
+        return this.findOne(item.id);
+      }
+      item.Creator = user;
+
+      return this.create(item);
+    });
   }
 }

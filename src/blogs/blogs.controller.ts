@@ -21,6 +21,9 @@ import { BlogGuard } from './guard/blog.guard';
 import { CacheService } from 'src/common/service/cache.services';
 import { BlogStatus } from './entities/blog.entity';
 import { AccessBlogGuard } from './guard/access-blog.guard';
+import { CategoriesService } from 'src/categories/categories.service';
+import { BlogCategoriesService } from 'src/blog-categories/blog-categories.service';
+import { BlogCategories } from 'src/blog-categories/entities/blog-categories.entity';
 
 @Controller('blogs')
 export class BlogsController {
@@ -30,6 +33,8 @@ export class BlogsController {
     private readonly blogsService: BlogsService,
     private readonly usersService: UsersService,
     private readonly cacheService: CacheService,
+    private readonly categoryService: CategoriesService,
+    private readonly blogCategoriesService: BlogCategoriesService
   ) {}
 
   @Post()
@@ -39,7 +44,17 @@ export class BlogsController {
 
     if (!user) throw new BadRequestException('User invalid!');
 
-    return this.blogsService.createBlog(user, createBlogDto);
+    let categories = await this.categoryService.createOrGetCategoryByConditions(createBlogDto.categories, user);
+    const blog = await this.blogsService.createBlog(user, createBlogDto);
+
+    categories.forEach(async (category) => {
+      let blogCategory = new BlogCategories()
+      blogCategory.blog = blog;
+      blogCategory.category = await category;
+      this.blogCategoriesService.create(blogCategory)
+    });
+
+    return blog;
   }
 
   @Get()
