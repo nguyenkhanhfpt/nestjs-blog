@@ -34,7 +34,7 @@ export class BlogsController {
     private readonly usersService: UsersService,
     private readonly cacheService: CacheService,
     private readonly categoryService: CategoriesService,
-    private readonly blogCategoriesService: BlogCategoriesService
+    private readonly blogCategoriesService: BlogCategoriesService,
   ) {}
 
   @Post()
@@ -44,15 +44,12 @@ export class BlogsController {
 
     if (!user) throw new BadRequestException('User invalid!');
 
-    let categories = await this.categoryService.createOrGetCategoryByConditions(createBlogDto.categories, user);
+    let categories = await this.categoryService.createOrGetCategoryByConditions(
+      createBlogDto.categories,
+      user,
+    );
     const blog = await this.blogsService.createBlog(user, createBlogDto);
-
-    categories.forEach(async (category) => {
-      let blogCategory = new BlogCategories()
-      blogCategory.blog = blog;
-      blogCategory.category = await category;
-      this.blogCategoriesService.create(blogCategory)
-    });
+    this.blogCategoriesService.createMany(blog, categories);
 
     return blog;
   }
@@ -67,6 +64,7 @@ export class BlogsController {
         where: {
           isPublic,
         },
+        relations: ['blogCategories.category'],
       });
 
       await this.cacheService.setCache(this.BLOG_REDIS, blogs);
@@ -76,7 +74,7 @@ export class BlogsController {
       where: {
         isPublic,
       },
-      relations: ['blogCategories.category']
+      relations: ['blogCategories.category'],
     });
 
     return blogs;
@@ -86,8 +84,8 @@ export class BlogsController {
   @UseGuards(AccessBlogGuard)
   async findOne(@Param('id') id: number) {
     let blog = await this.blogsService.findOneBy({
-      where: {id},
-      relations: ['blogCategories.category']
+      where: { id },
+      relations: ['blogCategories.category'],
     });
 
     if (!blog) throw new NotFoundException();
@@ -98,8 +96,22 @@ export class BlogsController {
   @Patch(':id')
   @UseGuards(BlogGuard)
   @UsePipes(new ValidationPipe({ transform: true }))
-  update(@Param('id') id: number, @Body() updateBlogDto: UpdateBlogDto) {
-    return this.blogsService.updateBlog(id, updateBlogDto);
+  async update(
+    @Req() req,
+    @Param('id') id: number,
+    @Body() updateBlogDto: UpdateBlogDto,
+  ) {
+    let user = await this.usersService.findOne(req.user['sub']);
+    let categories = await this.categoryService.createOrGetCategoryByConditions(
+      updateBlogDto?.categories || [],
+      user,
+    );
+    const blog = await this.blogsService.updateBlog(id, updateBlogDto);
+
+    await this.blogCategoriesService.deleteByBlog(blog);
+    this.blogCategoriesService.createMany(blog, categories);
+
+    return blog;
   }
 
   @Delete(':id')
