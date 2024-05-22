@@ -2,9 +2,7 @@ import { User } from 'src/users/entities/user.entity';
 import {
   Column,
   Entity,
-  JoinColumn,
   ManyToOne,
-  PrimaryColumn,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
@@ -13,15 +11,15 @@ export class Follows {
   @PrimaryGeneratedColumn()
   id: number;
 
-//   @Column({ name: 'follower_id' })
-//   followerId: number;
+  @Column({name: 'followerId'})
+  followerId: number;
 
-//   @Column({ name: 'user_id' })
-//   userId: number;
+  @Column({name: 'followingId'})
+  followingId: number;
 
-  @ManyToOne(() => User, (user) => user.followers)
+  @ManyToOne(() => User, (user) => user.followerList, { onDelete: 'CASCADE' })
   follower: User;
 
-  @ManyToOne(() => User, (user) => user.following)
+  @ManyToOne(() => User, (user) => user.followingList, { onDelete: 'CASCADE' })
   following: User;
 }

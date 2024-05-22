@@ -23,10 +23,10 @@ export class UsersController {
   @Get()
   findAll() {
     return this.usersService.findAll({
-      relations: {
-        following: true,
-        followers: true,
-      },
+      relations: [
+        'followingList.following',
+        'followerList.follower',
+      ],
     });
   }
 

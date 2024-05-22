@@ -8,6 +8,7 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { Follows } from 'src/follows/entities/follows.entity';
 
 @Entity({ name: 'users' })
 export class User {
@@ -35,10 +36,16 @@ export class User {
   @OneToMany(() => Category, (category) => category.Creator)
   categories: Category[];
 
-  @ManyToMany((type) => User, (user) => user.following)
-  @JoinTable()
-  followers: User[];
+  // @ManyToMany((type) => User, (user) => user.following)
+  // @JoinTable()
+  // followers: User[];
 
-  @ManyToMany((type) => User, (user) => user.followers)
-  following: User[];
+  // @ManyToMany((type) => User, (user) => user.followers)
+  // following: User[];
+
+  @OneToMany(() => Follows, (follows) => follows.following)
+  followerList: Follows[];
+
+  @OneToMany(() => Follows, (follows) => follows.follower)
+  followingList: Follows[]
 }
