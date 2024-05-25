@@ -13,6 +13,9 @@ import { redisStore } from 'cache-manager-redis-yet';
 import { CategoriesModule } from './categories/categories.module';
 import { BlogCategoriesModule } from './blog-categories/blog-categories.module';
 import { FollowsModule } from './follows/follows.module';
+import { NotificationTypesModule } from './notification-types/notification-types.module';
+import { NotificationsModule } from './notifications/notifications.module';
+import { NotificationUsersModule } from './notification-users/notification-users.module';
 
 @Module({
   imports: [
@@ -46,6 +49,9 @@ import { FollowsModule } from './follows/follows.module';
     CategoriesModule,
     BlogCategoriesModule,
     FollowsModule,
+    NotificationTypesModule,
+    NotificationsModule,
+    NotificationUsersModule,
   ],
   controllers: [AppController],
   providers: [

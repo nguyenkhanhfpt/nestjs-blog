@@ -26,6 +26,7 @@ export class UsersController {
       relations: [
         'followingList.following',
         'followerList.follower',
+        'notifications.notification',
       ],
     });
   }
