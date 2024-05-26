@@ -3,13 +3,12 @@ import { Blog } from 'src/blogs/entities/blog.entity';
 import {
   Column,
   Entity,
-  JoinTable,
-  ManyToMany,
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Follows } from 'src/follows/entities/follows.entity';
 import { NotificationUser } from 'src/notification-users/entities/notification-user.entity';
+import { Notification } from 'src/notifications/entities/notification.entity';
 
 @Entity({ name: 'users' })
 export class User {
@@ -37,13 +36,6 @@ export class User {
   @OneToMany(() => Category, (category) => category.Creator)
   categories: Category[];
 
-  // @ManyToMany((type) => User, (user) => user.following)
-  // @JoinTable()
-  // followers: User[];
-
-  // @ManyToMany((type) => User, (user) => user.followers)
-  // following: User[];
-
   @OneToMany(() => Follows, (follows) => follows.following)
   followerList: Follows[];
 
@@ -52,4 +44,7 @@ export class User {
 
   @OneToMany(() => NotificationUser, (notification) => notification.user)
   notifications: NotificationUser[];
+
+  @OneToMany(() => Notification, (notification) => notification.sender)
+  sendNotifications: Notification[];
 }

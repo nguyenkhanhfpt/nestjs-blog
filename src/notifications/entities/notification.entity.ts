@@ -1,5 +1,6 @@
 import { NotificationTypes } from 'src/notification-types/entities/notification-types.entity';
 import { NotificationUser } from 'src/notification-users/entities/notification-user.entity';
+import { User } from 'src/users/entities/user.entity';
 import {
   Column,
   CreateDateColumn,
@@ -37,6 +38,13 @@ export class Notification {
   @JoinColumn({ name: 'notification_type_id' })
   type: NotificationTypes;
 
-  @OneToMany(() => NotificationUser, (notificationUser) => notificationUser.notification)
+  @OneToMany(
+    () => NotificationUser,
+    (notificationUser) => notificationUser.notification,
+  )
   users: NotificationUser[];
+
+  @ManyToOne(() => User, (user) => user.sendNotifications)
+  @JoinColumn({ name: 'sender_id' })
+  sender: User;
 }
