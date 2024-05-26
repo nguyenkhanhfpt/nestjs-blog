@@ -9,6 +9,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Follows } from 'src/follows/entities/follows.entity';
+import { NotificationUser } from 'src/notification-users/entities/notification-user.entity';
 
 @Entity({ name: 'users' })
 export class User {
@@ -47,5 +48,8 @@ export class User {
   followerList: Follows[];
 
   @OneToMany(() => Follows, (follows) => follows.follower)
-  followingList: Follows[]
+  followingList: Follows[];
+
+  @OneToMany(() => NotificationUser, (notification) => notification.user)
+  notifications: NotificationUser[];
 }
