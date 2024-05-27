@@ -16,6 +16,7 @@ import { FollowsModule } from './follows/follows.module';
 import { NotificationTypesModule } from './notification-types/notification-types.module';
 import { NotificationsModule } from './notifications/notifications.module';
 import { NotificationUsersModule } from './notification-users/notification-users.module';
+import { EventEmitterModule } from '@nestjs/event-emitter';
 
 @Module({
   imports: [
@@ -43,6 +44,7 @@ import { NotificationUsersModule } from './notification-users/notification-users
         port: configService.get('REDIS_PORT'),
       }),
     }),
+    EventEmitterModule.forRoot(),
     UsersModule,
     AuthModule,
     BlogsModule,

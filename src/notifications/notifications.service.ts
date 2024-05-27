@@ -30,8 +30,8 @@ export class NotificationsService extends BaseService {
     const notification = await this.create({
       sender: createNotificationDto.sender,
       type: createNotificationDto.type,
+      additionalData: createNotificationDto.additionalData || null,
     });
-
     let listUsers = await this.getTargetNotification(createNotificationDto);
 
     listUsers.length &&

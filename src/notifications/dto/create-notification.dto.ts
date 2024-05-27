@@ -8,4 +8,6 @@ export class CreateNotificationDto {
     sender: User;
 
     targetUser?: User;
+
+    additionalData?: any;
 }

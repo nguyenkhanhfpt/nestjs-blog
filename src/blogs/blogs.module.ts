@@ -7,6 +7,8 @@ import { UsersModule } from 'src/users/users.module';
 import { CacheModule } from 'src/common/module/cache.module';
 import { CategoriesModule } from 'src/categories/categories.module';
 import { BlogCategoriesModule } from 'src/blog-categories/blog-categories.module';
+import { BlogCreatedListener } from './listeners/blog-created.listener';
+import { NotificationsModule } from 'src/notifications/notifications.module';
 
 @Module({
   imports: [
@@ -14,9 +16,10 @@ import { BlogCategoriesModule } from 'src/blog-categories/blog-categories.module
     CacheModule,
     CategoriesModule,
     BlogCategoriesModule,
-    TypeOrmModule.forFeature([Blog]),
+    NotificationsModule,
+    TypeOrmModule.forFeature([Blog])
   ],
   controllers: [BlogsController],
-  providers: [BlogsService],
+  providers: [BlogsService, BlogCreatedListener],
 })
 export class BlogsModule {}
