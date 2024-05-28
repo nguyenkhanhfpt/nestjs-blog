@@ -24,6 +24,8 @@ import { AccessBlogGuard } from './guard/access-blog.guard';
 import { CategoriesService } from 'src/categories/categories.service';
 import { BlogCategoriesService } from 'src/blog-categories/blog-categories.service';
 import { BlogCategories } from 'src/blog-categories/entities/blog-categories.entity';
+import { EventEmitter2 } from '@nestjs/event-emitter';
+import { BlogCreatedEvent } from './events/blog-created.event';
 
 @Controller('blogs')
 export class BlogsController {
@@ -35,6 +37,7 @@ export class BlogsController {
     private readonly cacheService: CacheService,
     private readonly categoryService: CategoriesService,
     private readonly blogCategoriesService: BlogCategoriesService,
+    private eventEmitter: EventEmitter2,
   ) {}
 
   @Post()
@@ -49,7 +52,17 @@ export class BlogsController {
       user,
     );
     const blog = await this.blogsService.createBlog(user, createBlogDto);
-    this.blogCategoriesService.createMany(blog, categories);
+    await this.blogCategoriesService.createMany(blog, categories);
+
+    this.eventEmitter.emitAsync(
+      'blog.created',
+      new BlogCreatedEvent({
+        user,
+        additionalData: {
+          blog,
+        },
+      }),
+    );
 
     return blog;
   }

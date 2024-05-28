@@ -25,12 +25,12 @@ export class BlogCategoriesService extends BaseService {
     });
   }
 
-  createMany(blog: Blog, categories: any) {
+  async createMany(blog: Blog, categories: any) {
     return categories.forEach(async (category) => {
       let blogCategory = new BlogCategories();
       blogCategory.blog = blog;
       blogCategory.category = await category;
-      this.create(blogCategory);
+      await this.create(blogCategory);
     });
   }
 }

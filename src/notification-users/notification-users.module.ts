@@ -8,5 +8,6 @@ import { NotificationUser } from './entities/notification-user.entity';
   imports: [TypeOrmModule.forFeature([NotificationUser])],
   controllers: [NotificationUsersController],
   providers: [NotificationUsersService],
+  exports: [NotificationUsersService]
 })
 export class NotificationUsersModule {}
