@@ -7,12 +7,15 @@ import {
 } from '@nestjs/common';
 import { UsersService } from 'src/users/users.service';
 import { FollowsService } from './follows.service';
+import { EventEmitter2 } from '@nestjs/event-emitter';
+import { FollowEvent } from './events/follow.event';
 
 @Controller('follows')
 export class FollowsController {
   constructor(
     private userService: UsersService,
     private followsService: FollowsService,
+    private eventEmitter: EventEmitter2,
   ) {}
 
   @Post(':id')
@@ -29,10 +32,20 @@ export class FollowsController {
       throw new BadRequestException();
     }
 
-    return await this.followsService.create({
+    let follow = await this.followsService.create({
       follower: user,
       following: followUser,
     });
+
+    this.eventEmitter.emitAsync(
+      'follow.user',
+      new FollowEvent({
+        sender: user,
+        targetUser: followUser,
+      }),
+    );
+
+    return follow;
   }
 
   @Post('/un-follow/:id')
