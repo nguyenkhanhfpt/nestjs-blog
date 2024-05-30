@@ -9,17 +9,22 @@ import { CategoriesModule } from 'src/categories/categories.module';
 import { BlogCategoriesModule } from 'src/blog-categories/blog-categories.module';
 import { BlogCreatedListener } from './listeners/blog-created.listener';
 import { NotificationsModule } from 'src/notifications/notifications.module';
+import { BullModule } from '@nestjs/bull';
+import { BlogProcessor } from './blog.processor';
 
 @Module({
   imports: [
+    BullModule.registerQueue({
+      name: 'blogs',
+    }),
     UsersModule,
     CacheModule,
     CategoriesModule,
     BlogCategoriesModule,
     NotificationsModule,
-    TypeOrmModule.forFeature([Blog])
+    TypeOrmModule.forFeature([Blog]),
   ],
   controllers: [BlogsController],
-  providers: [BlogsService, BlogCreatedListener],
+  providers: [BlogsService, BlogCreatedListener, BlogProcessor],
 })
 export class BlogsModule {}

@@ -17,6 +17,7 @@ import { NotificationTypesModule } from './notification-types/notification-types
 import { NotificationsModule } from './notifications/notifications.module';
 import { NotificationUsersModule } from './notification-users/notification-users.module';
 import { EventEmitterModule } from '@nestjs/event-emitter';
+import { BullModule } from '@nestjs/bull';
 
 @Module({
   imports: [
@@ -45,6 +46,15 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
       }),
     }),
     EventEmitterModule.forRoot(),
+    BullModule.forRootAsync({
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        redis: {
+          host: configService.get('REDIS_HOST'),
+          port: configService.get('REDIS_PORT'),
+        },
+      }),
+    }),
     UsersModule,
     AuthModule,
     BlogsModule,
