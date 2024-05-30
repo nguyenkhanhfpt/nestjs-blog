@@ -1,16 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { BlogCreatedEvent } from '../events/blog-created.event';
 import { OnEvent } from '@nestjs/event-emitter';
-import { NotificationsService } from 'src/notifications/notifications.service';
-import { NotificationType } from 'src/notification-types/entities/notification-types.entity';
 import { BlogStatus } from '../entities/blog.entity';
 import { InjectQueue } from '@nestjs/bull';
 import { Queue } from 'bull';
+import { BlogProcessor } from '../blog.processor';
 
 @Injectable()
 export class BlogCreatedListener {
   constructor(
-    private notificationService: NotificationsService,
     @InjectQueue('blogs') private blogQueue: Queue,
   ) {}
 
@@ -23,18 +21,9 @@ export class BlogCreatedListener {
       return false;
     }
 
-    this.blogQueue.add(
-      'release-notification-blog',
-      {user, blog},
-    );
-
-    this.notificationService.releaseNotification({
-      sender: user,
-      type: NotificationType.CREATE_BLOG,
-      additionalData: {
-        blogId: blog.id,
-        blogTitle: blog.title,
-      },
+    this.blogQueue.add(BlogProcessor.RELEASE_NOTIFICATION_BLOG_PROCESS, {
+      user,
+      blog,
     });
   }
 }

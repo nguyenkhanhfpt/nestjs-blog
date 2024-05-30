@@ -23,9 +23,8 @@ import { BlogProcessor } from './blog.processor';
     BlogCategoriesModule,
     NotificationsModule,
     TypeOrmModule.forFeature([Blog]),
-    BlogProcessor,
   ],
   controllers: [BlogsController],
-  providers: [BlogsService, BlogCreatedListener],
+  providers: [BlogsService, BlogCreatedListener, BlogProcessor],
 })
 export class BlogsModule {}

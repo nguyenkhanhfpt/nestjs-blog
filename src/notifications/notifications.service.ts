@@ -27,6 +27,7 @@ export class NotificationsService extends BaseService {
   }
 
   async releaseNotification(createNotificationDto: CreateNotificationDto) {
+    console.log('Start release notification');
     const notification = await this.create({
       sender: createNotificationDto.sender,
       type: createNotificationDto.type,
