@@ -30,6 +30,9 @@ export class User {
   @Column({ name: 'refresh_token', nullable: true })
   refreshToken: string;
 
+  @Column({name: "is_private", type: "bool", default: false})
+  isPrivate: boolean;
+
   @OneToMany(() => Blog, (blog) => blog.user)
   blogs: Blog[];
 
