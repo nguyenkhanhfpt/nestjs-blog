@@ -18,6 +18,7 @@ import { NotificationsModule } from './notifications/notifications.module';
 import { NotificationUsersModule } from './notification-users/notification-users.module';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { BullModule } from '@nestjs/bull';
+import { RequestFollowModule } from './request-follow/request-follow.module';
 
 @Module({
   imports: [
@@ -64,6 +65,7 @@ import { BullModule } from '@nestjs/bull';
     NotificationTypesModule,
     NotificationsModule,
     NotificationUsersModule,
+    RequestFollowModule,
   ],
   controllers: [AppController],
   providers: [
