@@ -6,10 +6,16 @@ import { Follows } from './entities/follows.entity';
 import { UsersModule } from 'src/users/users.module';
 import { NotificationsModule } from 'src/notifications/notifications.module';
 import { FollowListener } from './listeners/follow.listener';
+import { RequestFollowModule } from 'src/request-follow/request-follow.module';
 
 @Module({
-  imports: [UsersModule, NotificationsModule, TypeOrmModule.forFeature([Follows])],
+  imports: [
+    UsersModule,
+    NotificationsModule,
+    RequestFollowModule,
+    TypeOrmModule.forFeature([Follows]),
+  ],
   controllers: [FollowsController],
-  providers: [FollowsService, FollowListener]
+  providers: [FollowsService, FollowListener],
 })
 export class FollowsModule {}

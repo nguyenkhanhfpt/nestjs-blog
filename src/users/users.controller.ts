@@ -7,10 +7,14 @@ import {
   Param,
   Delete,
   ParseIntPipe,
+  UsePipes,
+  ValidationPipe,
+  UseGuards,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import UpdateGuard from './guard/update.guard';
 
 @Controller('users')
 export class UsersController {
@@ -35,12 +39,20 @@ export class UsersController {
 
   @Get(':id')
   async findOne(@Param('id', ParseIntPipe) id: number) {
-    return await this.usersService.findOne(id);
+    return await this.usersService.findOneBy({
+      where: { id },
+      relations: ['requestFollows.requestUser', 'followWaitList.user'],
+    });
   }
 
+  @UseGuards(UpdateGuard)
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.usersService.update(+id, updateUserDto);
+  @UsePipes(new ValidationPipe({ transform: true, whitelist: true }))
+  update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateUserDto: UpdateUserDto,
+  ) {
+    return this.usersService.update(id, updateUserDto);
   }
 
   @Delete(':id')

@@ -51,6 +51,8 @@ export class NotificationsService extends BaseService {
         );
         break;
       case NotificationType.FOLLOW:
+      case NotificationType.REQUEST_FOLLOW:
+      case NotificationType.ACCEPT_REQUEST_FOLLOW:
         targetList = createNotificationDto.targetUser
           ? [createNotificationDto.targetUser]
           : [];

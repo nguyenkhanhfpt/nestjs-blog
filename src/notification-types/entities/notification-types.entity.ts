@@ -4,6 +4,8 @@ import { Column, Entity, Index, OneToMany, PrimaryGeneratedColumn } from 'typeor
 export enum NotificationType {
   CREATE_BLOG = 1,
   FOLLOW = 2,
+  REQUEST_FOLLOW = 3,
+  ACCEPT_REQUEST_FOLLOW = 4
 }
 
 @Entity({ name: 'notification_types' })

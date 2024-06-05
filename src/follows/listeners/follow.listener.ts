@@ -16,4 +16,22 @@ export class FollowListener {
       targetUser: followEvent.targetUser,
     });
   }
+
+  @OnEvent('request.follow.user')
+  handleRequestFollowUserEvent(followEvent: FollowEvent) {
+    this.notificationService.releaseNotification({
+      type: NotificationType.REQUEST_FOLLOW,
+      sender: followEvent.sender,
+      targetUser: followEvent.targetUser,
+    });
+  }
+
+  @OnEvent('accept.request.follow.user')
+  handleAcceptRequestFollowUserEvent(followEvent: FollowEvent) {
+    this.notificationService.releaseNotification({
+      type: NotificationType.ACCEPT_REQUEST_FOLLOW,
+      sender: followEvent.sender,
+      targetUser: followEvent.targetUser,
+    });
+  }
 }
