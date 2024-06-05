@@ -8,5 +8,6 @@ import { RequestFollow } from './entities/request-follow.entity';
   imports: [TypeOrmModule.forFeature([RequestFollow])],
   controllers: [RequestFollowController],
   providers: [RequestFollowService],
+  exports: [RequestFollowService]
 })
 export class RequestFollowModule {}
