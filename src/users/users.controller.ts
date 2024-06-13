@@ -10,11 +10,16 @@ import {
   UsePipes,
   ValidationPipe,
   UseGuards,
+  Req,
+  UploadedFile,
+  UseInterceptors,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import UpdateGuard from './guard/update.guard';
+import { FileInterceptor } from '@nestjs/platform-express';
+import * as fs from 'fs';
 
 @Controller('users')
 export class UsersController {
@@ -53,6 +58,24 @@ export class UsersController {
     @Body() updateUserDto: UpdateUserDto,
   ) {
     return this.usersService.update(id, updateUserDto);
+  }
+
+  @UseGuards(UpdateGuard)
+  @Patch('update-avatar/:id')
+  @UseInterceptors(FileInterceptor('file'))
+  updateAvatar(
+    @Param('id', ParseIntPipe) id: number,
+    @UploadedFile() file, @Body() body
+  ) {
+    console.log(file)
+
+    let timestamp = Date.now();
+
+    fs.writeFileSync(`./public/upload/images/users/${timestamp}.jpg`, file.buffer);
+
+    return {
+      message: 'Upload success'
+    };
   }
 
   @Delete(':id')

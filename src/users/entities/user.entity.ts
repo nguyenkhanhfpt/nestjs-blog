@@ -29,6 +29,9 @@ export class User {
   @Column({ name: 'is_private', type: 'bool', default: false })
   isPrivate: boolean;
 
+  @Column({ name: 'avatar', nullable: true})
+  avatar: string;
+
   @OneToMany(() => Blog, (blog) => blog.user)
   blogs: Blog[];
 

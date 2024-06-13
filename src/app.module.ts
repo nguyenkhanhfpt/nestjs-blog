@@ -19,6 +19,8 @@ import { NotificationUsersModule } from './notification-users/notification-users
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { BullModule } from '@nestjs/bull';
 import { RequestFollowModule } from './request-follow/request-follow.module';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
 @Module({
   imports: [
@@ -55,6 +57,9 @@ import { RequestFollowModule } from './request-follow/request-follow.module';
           port: configService.get('REDIS_PORT'),
         },
       }),
+    }),
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'public'),
     }),
     UsersModule,
     AuthModule,
