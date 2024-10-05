@@ -19,11 +19,15 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import UpdateGuard from './guard/update.guard';
 import { FileInterceptor } from '@nestjs/platform-express';
-import * as fs from 'fs';
+import { FilesService } from 'src/common/service/files.service';
+import { IMAGES_PATH_PREFIX } from 'src/app.constant';
 
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(
+    private readonly usersService: UsersService,
+    private readonly filesService: FilesService,
+  ) {}
 
   @Post()
   create(@Body() createUserDto: CreateUserDto) {
@@ -63,19 +67,15 @@ export class UsersController {
   @UseGuards(UpdateGuard)
   @Patch('update-avatar/:id')
   @UseInterceptors(FileInterceptor('file'))
-  updateAvatar(
-    @Param('id', ParseIntPipe) id: number,
-    @UploadedFile() file, @Body() body
-  ) {
-    console.log(file)
+  updateAvatar(@Param('id', ParseIntPipe) id: number, @UploadedFile() file) {
+    const timestamp = Date.now();
+    const fileName = this.filesService.writeFileSync(
+      file,
+      timestamp.toString(),
+      `${IMAGES_PATH_PREFIX}/users`,
+    );
 
-    let timestamp = Date.now();
-
-    fs.writeFileSync(`./public/upload/images/users/${timestamp}.jpg`, file.buffer);
-
-    return {
-      message: 'Upload success'
-    };
+    return this.usersService.update(id, { avatar: fileName } as UpdateUserDto);
   }
 
   @Delete(':id')

@@ -6,4 +6,6 @@ export class CreateUserDto {
 
     @IsBoolean()
     isPrivate: boolean;
+
+    avatar?: string;
 }
