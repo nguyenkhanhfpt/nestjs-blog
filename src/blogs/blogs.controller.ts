@@ -98,7 +98,7 @@ export class BlogsController {
   async findOne(@Param('id') id: number) {
     let blog = await this.blogsService.findOneBy({
       where: { id },
-      relations: ['blogCategories.category'],
+      relations: ['blogCategories.category', 'tags'],
     });
 
     if (!blog) throw new NotFoundException();

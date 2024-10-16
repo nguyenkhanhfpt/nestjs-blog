@@ -1,4 +1,5 @@
 import { BlogCategories } from 'src/blog-categories/entities/blog-categories.entity';
+import { BlogTag } from 'src/blog-tags/entities/blog-tags.entity';
 import { User } from 'src/users/entities/user.entity';
 import {
   Column,
@@ -40,4 +41,7 @@ export class Blog {
 
   @OneToMany(() => BlogCategories, (blogCategory) => blogCategory.blog)
   blogCategories: BlogCategories[];
+
+  @OneToMany(() => BlogTag, (blogTag) => blogTag.blog, { cascade: true })
+  tags: BlogTag[];
 }
