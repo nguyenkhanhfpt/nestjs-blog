@@ -12,6 +12,7 @@ import {
   BadRequestException,
   NotFoundException,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { BlogsService } from './blogs.service';
 import { CreateBlogDto } from './dto/create-blog.dto';
@@ -23,11 +24,12 @@ import { BlogStatus } from './entities/blog.entity';
 import { AccessBlogGuard } from './guard/access-blog.guard';
 import { CategoriesService } from 'src/categories/categories.service';
 import { BlogCategoriesService } from 'src/blog-categories/blog-categories.service';
-import { BlogCategories } from 'src/blog-categories/entities/blog-categories.entity';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { BlogCreatedEvent } from './events/blog-created.event';
+import { BlogInterceptor } from 'src/common/interceptors';
 
 @Controller('blogs')
+@UseInterceptors(BlogInterceptor)
 export class BlogsController {
   private BLOG_REDIS = 'blog-redis';
 
