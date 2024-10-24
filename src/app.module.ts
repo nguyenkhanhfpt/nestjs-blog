@@ -22,6 +22,7 @@ import { RequestFollowModule } from './request-follow/request-follow.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { BlogTagsModule } from './blog-tags/blog-tags.module';
+import { EventsModule } from './events/event.module';
 
 @Module({
   imports: [
@@ -73,6 +74,7 @@ import { BlogTagsModule } from './blog-tags/blog-tags.module';
     NotificationUsersModule,
     RequestFollowModule,
     BlogTagsModule,
+    EventsModule,
   ],
   controllers: [AppController],
   providers: [
