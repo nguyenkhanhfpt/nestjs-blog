@@ -20,13 +20,14 @@ import { UpdateBlogDto } from './dto/update-blog.dto';
 import { UsersService } from 'src/users/users.service';
 import { BlogGuard } from './guard/blog.guard';
 import { CacheService } from 'src/common/service/cache.services';
-import { BlogStatus } from './entities/blog.entity';
+import { Blog, BlogStatus } from './entities/blog.entity';
 import { AccessBlogGuard } from './guard/access-blog.guard';
 import { CategoriesService } from 'src/categories/categories.service';
 import { BlogCategoriesService } from 'src/blog-categories/blog-categories.service';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { BlogCreatedEvent } from './events/blog-created.event';
 import { BlogInterceptor } from 'src/common/interceptors';
+import { BlogSerialize } from 'src/serializes/blog.serialize';
 
 @Controller('blogs')
 @UseInterceptors(BlogInterceptor)
@@ -92,7 +93,9 @@ export class BlogsController {
       relations: ['blogCategories.category'],
     });
 
-    return blogs;
+    return (blogs as Blog[]).map((blog) => {
+      return new BlogSerialize(blog, { type: 'BLOG_LIST' }).perform();
+    });
   }
 
   @Get(':id')
