@@ -5,6 +5,7 @@ import { Follows } from 'src/follows/entities/follows.entity';
 import { NotificationUser } from 'src/notification-users/entities/notification-user.entity';
 import { Notification } from 'src/notifications/entities/notification.entity';
 import { RequestFollow } from 'src/request-follow/entities/request-follow.entity';
+import { Exclude } from 'class-transformer';
 
 @Entity({ name: 'users' })
 export class User {
@@ -20,6 +21,7 @@ export class User {
   @Column({ name: 'bio', nullable: true })
   bio: string;
 
+  @Exclude()
   @Column({ name: 'password', type: 'text' })
   password: string;
 
